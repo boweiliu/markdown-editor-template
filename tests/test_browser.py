@@ -125,3 +125,24 @@ def test_review_a_plan(server) -> None:
         assert page.get_attribute(".tiptap", "contenteditable") == "false"
         assert errors == []
         browser.close()
+
+
+def test_toolbar_stays_attached_in_a_narrow_window(server) -> None:
+    # In a narrow window the toolbar wraps onto two rows; it must stay directly under the top bar while scrolling.
+    url, workspace = server
+    plan = workspace / "long.md"
+    plan.write_text("# Long\n\n" + "\n\n".join(f"Paragraph {number} " + "words " * 40 for number in range(40)) + "\n")
+    with playwright_api.sync_playwright() as playwright:
+        browser = playwright.chromium.launch(executable_path=CHROMIUM)
+        page = browser.new_page(viewport={"width": 640, "height": 500})
+        page.goto(f"{url}/?path={plan}")
+        page.wait_for_selector(".tiptap h1")
+        page.mouse.wheel(0, 3000)
+        time.sleep(0.5)
+        top_bar = page.locator("#topbar").bounding_box()
+        toolbar = page.locator("#toolbar").bounding_box()
+        assert top_bar is not None and toolbar is not None
+        assert abs(top_bar["y"]) < 1
+        assert abs(toolbar["y"] - (top_bar["y"] + top_bar["height"])) < 1
+        assert toolbar["height"] > 40  # it really did wrap onto two rows
+        browser.close()
