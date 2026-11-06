@@ -83,6 +83,12 @@ const state: PageState = {
   saveTimer: null,
 };
 
+// Scrolling to a line (find, keyboard, a clicked suggestion) stops below the sticky header, whatever its height.
+const chrome = byId("chrome");
+new ResizeObserver(() => {
+  document.documentElement.style.setProperty("--chrome-height", `${chrome.offsetHeight}px`);
+}).observe(chrome);
+
 let editor: Editor = createEditor(ui.editorHost, onEdit);
 
 /** A fresh editor per load, so Undo never reaches back into another file or an older version of this one. */

@@ -20,7 +20,8 @@
 }
 
 html {
-  scroll-padding-top: 110px;
+  /* main.ts keeps --chrome-height at the sticky header's real height */
+  scroll-padding-top: calc(var(--chrome-height, 100px) + 12px);
 }
 
 html,
@@ -78,10 +79,16 @@ button.selected {
 
 /* ---------------------------------------------------------------- top bar and toolbar */
 
-.topbar {
+/* The top bar, the toolbar and the banner stick to the top together, so a toolbar that wraps onto a second row in
+   a narrow window can never leave a gap the text shows through. */
+.chrome {
   position: sticky;
   top: 0;
   z-index: 5;
+  background: var(--paper);
+}
+
+.topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -157,9 +164,6 @@ body[data-mode="suggest"] .mode-switch button.selected {
 }
 
 .toolbar {
-  position: sticky;
-  top: 46px;
-  z-index: 4;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -643,9 +647,6 @@ span.comment-note::after {
 @media (max-width: 720px) {
   .topbar {
     flex-wrap: wrap;
-  }
-  .toolbar {
-    top: 84px;
   }
   .prose .tiptap {
     font-size: 17px;
