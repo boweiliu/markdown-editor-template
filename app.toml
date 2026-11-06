@@ -1,0 +1,13 @@
+name = "markdown-editor"
+display_name = "Markdown Editor"
+description = "Read, comment on and suggest edits to markdown files (agent plans, notes); suggestions and comments are saved inside the file as CriticMarkup"
+icon = "icon.svg"
+priority = "user"
+program = "markdown-editor"
+stop_when_no_windows = true
+
+[[launch_paths]]
+id = "file"
+label = "Markdown Editor"
+path = "/"
+params = [{name = "path", label = "File", required = false}]

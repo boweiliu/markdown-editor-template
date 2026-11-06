@@ -1,0 +1,25 @@
+[project]
+name = "markdown-editor"
+version = "0.1.0"
+description = "Read, comment on and redline the markdown files agents write, with suggestions saved in the file as CriticMarkup"
+requires-python = ">=3.11"
+dependencies = ["flask>=3.0"]
+
+[project.scripts]
+markdown-editor = "markdown_editor.runner:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/markdown_editor"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"icon.svg" = "markdown_editor/icon.svg"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
